@@ -1,26 +1,142 @@
 @import "tailwindcss";
 
+/* Custom color palette for civic-themed design */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Navy blues */
+  --navy-50: #f0f4f8;
+  --navy-100: #d9e2ec;
+  --navy-200: #bcccdc;
+  --navy-300: #9fb3c8;
+  --navy-400: #829ab1;
+  --navy-500: #627d98;
+  --navy-600: #486581;
+  --navy-700: #334e68;
+  --navy-800: #243b53;
+  --navy-900: #1a2744;
+
+  /* Crimson accents */
+  --crimson-50: #fff5f5;
+  --crimson-100: #fed7d7;
+  --crimson-200: #feb2b2;
+  --crimson-300: #fc8181;
+  --crimson-400: #f56565;
+  --crimson-500: #e53e3e;
+  --crimson-600: #b22234;
+  --crimson-700: #9b2c2c;
+  --crimson-800: #822727;
+  --crimson-900: #63171b;
+
+  /* Cream background */
+  --cream: #f8f7f4;
+
+  --background: var(--cream);
+  --foreground: var(--navy-900);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-source-sans);
+  --font-serif: var(--font-lora);
   --font-mono: var(--font-geist-mono);
+
+  /* Navy colors */
+  --color-navy-50: var(--navy-50);
+  --color-navy-100: var(--navy-100);
+  --color-navy-200: var(--navy-200);
+  --color-navy-300: var(--navy-300);
+  --color-navy-400: var(--navy-400);
+  --color-navy-500: var(--navy-500);
+  --color-navy-600: var(--navy-600);
+  --color-navy-700: var(--navy-700);
+  --color-navy-800: var(--navy-800);
+  --color-navy-900: var(--navy-900);
+
+  /* Crimson colors */
+  --color-crimson-50: var(--crimson-50);
+  --color-crimson-100: var(--crimson-100);
+  --color-crimson-200: var(--crimson-200);
+  --color-crimson-300: var(--crimson-300);
+  --color-crimson-400: var(--crimson-400);
+  --color-crimson-500: var(--crimson-500);
+  --color-crimson-600: var(--crimson-600);
+  --color-crimson-700: var(--crimson-700);
+  --color-crimson-800: var(--crimson-800);
+  --color-crimson-900: var(--crimson-900);
+
+  /* Cream */
+  --color-cream: var(--cream);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f172a;
+    --foreground: #e2e8f0;
+    --cream: #0f172a;
+    --navy-50: #1e293b;
+    --navy-100: #334155;
+    --navy-200: #475569;
+    --navy-300: #64748b;
+    --navy-400: #94a3b8;
+    --navy-500: #cbd5e1;
+    --navy-600: #e2e8f0;
+    --navy-700: #f1f5f9;
+    --navy-800: #f8fafc;
+    --navy-900: #ffffff;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+}
+
+/* Subtle paper texture */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--navy-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--navy-300);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--navy-400);
+}
+
+/* Line clamp utility */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid var(--crimson-500);
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--crimson-200);
+  color: var(--navy-900);
 }
