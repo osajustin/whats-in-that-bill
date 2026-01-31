@@ -27,20 +27,20 @@ export function Pagination({ pagination }: PaginationProps) {
   const totalPages = total ? Math.ceil(total / pagination.limit) : undefined;
 
   return (
-    <div className="flex items-center justify-between border-t border-navy-200 bg-white px-4 py-3 sm:px-6">
+    <div className="mt-8 flex items-center justify-between border-t border-sepia-300 bg-paper px-4 py-4 sm:px-6">
       {/* Mobile View */}
       <div className="flex flex-1 justify-between sm:hidden">
         <button
           onClick={() => goToPage(page - 1)}
           disabled={page <= 1 || isPending}
-          className="relative inline-flex items-center rounded-md border border-navy-300 bg-white px-4 py-2 text-sm font-medium text-navy-700 hover:bg-navy-50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="relative inline-flex items-center border-b border-sepia-400 px-4 py-2 text-sm font-medium text-sepia-700 hover:border-sepia-800 hover:text-sepia-900 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Previous
         </button>
         <button
           onClick={() => goToPage(page + 1)}
           disabled={!hasMore || isPending}
-          className="relative ml-3 inline-flex items-center rounded-md border border-navy-300 bg-white px-4 py-2 text-sm font-medium text-navy-700 hover:bg-navy-50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="relative ml-3 inline-flex items-center border-b border-sepia-400 px-4 py-2 text-sm font-medium text-sepia-700 hover:border-sepia-800 hover:text-sepia-900 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Next
         </button>
@@ -49,38 +49,37 @@ export function Pagination({ pagination }: PaginationProps) {
       {/* Desktop View */}
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-navy-700">
+          <p className="text-sm text-sepia-600">
             {total !== undefined ? (
               <>
-                Showing page <span className="font-medium">{page}</span>
+                Page <span className="font-serif font-semibold text-sepia-900">{page}</span>
                 {totalPages && (
                   <>
                     {" "}
-                    of <span className="font-medium">{totalPages}</span>
+                    of <span className="font-serif font-semibold text-sepia-900">{totalPages}</span>
                   </>
                 )}
-                {" • "}
-                <span className="font-medium">{total}</span> total bills
+                {" — "}
+                <span className="font-serif font-semibold text-sepia-900">{total}</span> total bills
               </>
             ) : (
-              <>Page {page}</>
+              <>Page <span className="font-serif font-semibold">{page}</span></>
             )}
           </p>
         </div>
         <div>
           <nav
-            className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+            className="isolate inline-flex items-center gap-1"
             aria-label="Pagination"
           >
             {/* Previous Button */}
             <button
               onClick={() => goToPage(page - 1)}
               disabled={page <= 1 || isPending}
-              className="relative inline-flex items-center rounded-l-md border border-navy-300 bg-white px-3 py-2 text-sm font-medium text-navy-500 hover:bg-navy-50 focus:z-20 disabled:cursor-not-allowed disabled:opacity-50"
+              className="relative inline-flex items-center border-b border-transparent px-3 py-2 text-sm font-medium text-sepia-600 hover:border-sepia-800 hover:text-sepia-900 focus:z-20 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <span className="sr-only">Previous</span>
               <svg
-                className="h-5 w-5"
+                className="mr-1 h-4 w-4"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"
@@ -91,22 +90,29 @@ export function Pagination({ pagination }: PaginationProps) {
                   clipRule="evenodd"
                 />
               </svg>
+              Previous
             </button>
 
+            {/* Divider */}
+            <span className="mx-2 h-4 w-px bg-sepia-300" />
+
             {/* Current Page */}
-            <span className="relative inline-flex items-center border border-navy-300 bg-crimson-50 px-4 py-2 text-sm font-semibold text-crimson-600 focus:z-20">
+            <span className="relative inline-flex items-center border-b-2 border-sepia-800 px-4 py-2 font-serif text-sm font-bold text-sepia-900">
               {page}
             </span>
+
+            {/* Divider */}
+            <span className="mx-2 h-4 w-px bg-sepia-300" />
 
             {/* Next Button */}
             <button
               onClick={() => goToPage(page + 1)}
               disabled={!hasMore || isPending}
-              className="relative inline-flex items-center rounded-r-md border border-navy-300 bg-white px-3 py-2 text-sm font-medium text-navy-500 hover:bg-navy-50 focus:z-20 disabled:cursor-not-allowed disabled:opacity-50"
+              className="relative inline-flex items-center border-b border-transparent px-3 py-2 text-sm font-medium text-sepia-600 hover:border-sepia-800 hover:text-sepia-900 focus:z-20 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <span className="sr-only">Next</span>
+              Next
               <svg
-                className="h-5 w-5"
+                className="ml-1 h-4 w-4"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"

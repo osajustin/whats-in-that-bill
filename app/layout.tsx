@@ -49,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lora.variable} ${sourceSans.variable} ${geistMono.variable} min-h-screen bg-cream font-sans antialiased`}
+        className={`${lora.variable} ${sourceSans.variable} ${geistMono.variable} min-h-screen bg-cream font-sans antialiased text-sepia-900`}
       >
         <Header />
         {children}

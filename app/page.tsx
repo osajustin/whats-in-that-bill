@@ -67,31 +67,40 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      {/* Hero Section */}
-      <section className="mb-10 text-center">
-        <h1 className="mb-4 font-serif text-4xl font-bold text-navy-900 sm:text-5xl">
-          What&apos;s in that Bill?
+      {/* Editorial Hero Section */}
+      <section className="mb-12 text-center">
+        <h1 className="editorial-headline-caps mb-6 font-serif text-5xl text-sepia-900 sm:text-6xl lg:text-7xl">
+          ALL BILLS!
         </h1>
-        <p className="mx-auto max-w-2xl text-lg text-navy-600">
-          Understand Congressional legislation with AI-powered summaries.
-          We analyze bills so you can stay informed about laws that affect your
-          life.
+        <p className="mx-auto max-w-xl font-serif text-xl italic text-sepia-700 sm:text-2xl">
+          A curated selection of Congressional legislation — 
+          <br className="hidden sm:block" />
+          spanning the current session.
+        </p>
+        <p className="mt-4 text-sm text-sepia-500">
+          TIP! Use filters to explore by status
         </p>
       </section>
 
+      {/* Horizontal Divider */}
+      <div className="mb-8 h-px bg-sepia-800" />
+
       {/* Search and Filters */}
       <section className="mb-8">
-        <Suspense fallback={<div className="h-24 animate-pulse rounded-lg bg-navy-100" />}>
+        <Suspense fallback={<div className="h-16 animate-pulse bg-sepia-100" />}>
           <SearchFilters />
         </Suspense>
       </section>
 
+      {/* Section Divider */}
+      <div className="mb-8 h-px bg-sepia-300" />
+
       {/* Bills Grid */}
       <section>
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="font-serif text-2xl font-semibold text-navy-900">
+          <h2 className="font-serif text-2xl font-bold tracking-tight text-sepia-900 sm:text-3xl">
             {params.q
-              ? `Search Results for "${params.q}"`
+              ? `Results for "${params.q}"`
               : params.status
                 ? `${params.status} Bills`
                 : "Recent Bills"}
@@ -103,20 +112,25 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </Suspense>
       </section>
 
-      {/* Footer Info */}
-      <footer className="mt-16 border-t border-navy-200 pt-8 text-center">
-        <p className="text-sm text-navy-500">
+      {/* Footer Divider */}
+      <div className="mt-16 h-px bg-sepia-800" />
+
+      {/* Editorial Footer */}
+      <footer className="py-8 text-center">
+        <p className="text-sm text-sepia-600">
           Data sourced from{" "}
           <a
             href="https://api.congress.gov/"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-medium text-crimson-600 hover:text-crimson-700"
+            className="font-medium text-coral-600 hover:text-coral-700"
           >
             Congress.gov API
           </a>
-          . AI summaries are generated for informational purposes and may contain
-          errors. Always refer to official sources for authoritative information.
+          . AI summaries are generated for informational purposes.
+        </p>
+        <p className="mt-2 font-serif text-xs italic text-sepia-500">
+          Always refer to official sources for authoritative information.
         </p>
       </footer>
     </main>

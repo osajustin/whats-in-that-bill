@@ -1,36 +1,37 @@
 @import "tailwindcss";
 
-/* Custom color palette for civic-themed design */
+/* Editorial/Newspaper-inspired color palette */
 :root {
-  /* Navy blues */
-  --navy-50: #f0f4f8;
-  --navy-100: #d9e2ec;
-  --navy-200: #bcccdc;
-  --navy-300: #9fb3c8;
-  --navy-400: #829ab1;
-  --navy-500: #627d98;
-  --navy-600: #486581;
-  --navy-700: #334e68;
-  --navy-800: #243b53;
-  --navy-900: #1a2744;
+  /* Sepia/Brown tones (replacing navy) */
+  --sepia-50: #faf9f6;
+  --sepia-100: #f5f3ed;
+  --sepia-200: #e8e4db;
+  --sepia-300: #d4cfc3;
+  --sepia-400: #b8b1a1;
+  --sepia-500: #9c9485;
+  --sepia-600: #6b6560;
+  --sepia-700: #4a4541;
+  --sepia-800: #2a2825;
+  --sepia-900: #1a1a18;
 
-  /* Crimson accents */
-  --crimson-50: #fff5f5;
-  --crimson-100: #fed7d7;
-  --crimson-200: #feb2b2;
-  --crimson-300: #fc8181;
-  --crimson-400: #f56565;
-  --crimson-500: #e53e3e;
-  --crimson-600: #b22234;
-  --crimson-700: #9b2c2c;
-  --crimson-800: #822727;
-  --crimson-900: #63171b;
+  /* Coral/Terracotta accents (replacing crimson) */
+  --coral-50: #fef6f4;
+  --coral-100: #fde8e3;
+  --coral-200: #f9ccc2;
+  --coral-300: #f4a896;
+  --coral-400: #e8785f;
+  --coral-500: #c4553d;
+  --coral-600: #a84532;
+  --coral-700: #8c3828;
+  --coral-800: #6f2c20;
+  --coral-900: #4d1e16;
 
-  /* Cream background */
-  --cream: #f8f7f4;
+  /* Paper/Cream background */
+  --cream: #f5f3ed;
+  --paper: #faf9f6;
 
   --background: var(--cream);
-  --foreground: var(--navy-900);
+  --foreground: var(--sepia-900);
 }
 
 @theme inline {
@@ -40,49 +41,51 @@
   --font-serif: var(--font-lora);
   --font-mono: var(--font-geist-mono);
 
-  /* Navy colors */
-  --color-navy-50: var(--navy-50);
-  --color-navy-100: var(--navy-100);
-  --color-navy-200: var(--navy-200);
-  --color-navy-300: var(--navy-300);
-  --color-navy-400: var(--navy-400);
-  --color-navy-500: var(--navy-500);
-  --color-navy-600: var(--navy-600);
-  --color-navy-700: var(--navy-700);
-  --color-navy-800: var(--navy-800);
-  --color-navy-900: var(--navy-900);
+  /* Sepia colors (editorial browns) */
+  --color-sepia-50: var(--sepia-50);
+  --color-sepia-100: var(--sepia-100);
+  --color-sepia-200: var(--sepia-200);
+  --color-sepia-300: var(--sepia-300);
+  --color-sepia-400: var(--sepia-400);
+  --color-sepia-500: var(--sepia-500);
+  --color-sepia-600: var(--sepia-600);
+  --color-sepia-700: var(--sepia-700);
+  --color-sepia-800: var(--sepia-800);
+  --color-sepia-900: var(--sepia-900);
 
-  /* Crimson colors */
-  --color-crimson-50: var(--crimson-50);
-  --color-crimson-100: var(--crimson-100);
-  --color-crimson-200: var(--crimson-200);
-  --color-crimson-300: var(--crimson-300);
-  --color-crimson-400: var(--crimson-400);
-  --color-crimson-500: var(--crimson-500);
-  --color-crimson-600: var(--crimson-600);
-  --color-crimson-700: var(--crimson-700);
-  --color-crimson-800: var(--crimson-800);
-  --color-crimson-900: var(--crimson-900);
+  /* Coral colors (accent) */
+  --color-coral-50: var(--coral-50);
+  --color-coral-100: var(--coral-100);
+  --color-coral-200: var(--coral-200);
+  --color-coral-300: var(--coral-300);
+  --color-coral-400: var(--coral-400);
+  --color-coral-500: var(--coral-500);
+  --color-coral-600: var(--coral-600);
+  --color-coral-700: var(--coral-700);
+  --color-coral-800: var(--coral-800);
+  --color-coral-900: var(--coral-900);
 
-  /* Cream */
+  /* Paper/Cream */
   --color-cream: var(--cream);
+  --color-paper: var(--paper);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f172a;
-    --foreground: #e2e8f0;
-    --cream: #0f172a;
-    --navy-50: #1e293b;
-    --navy-100: #334155;
-    --navy-200: #475569;
-    --navy-300: #64748b;
-    --navy-400: #94a3b8;
-    --navy-500: #cbd5e1;
-    --navy-600: #e2e8f0;
-    --navy-700: #f1f5f9;
-    --navy-800: #f8fafc;
-    --navy-900: #ffffff;
+    --background: #1a1a18;
+    --foreground: #e8e4db;
+    --cream: #1a1a18;
+    --paper: #2a2825;
+    --sepia-50: #2a2825;
+    --sepia-100: #3a3733;
+    --sepia-200: #4a4541;
+    --sepia-300: #6b6560;
+    --sepia-400: #9c9485;
+    --sepia-500: #b8b1a1;
+    --sepia-600: #d4cfc3;
+    --sepia-700: #e8e4db;
+    --sepia-800: #f5f3ed;
+    --sepia-900: #faf9f6;
   }
 }
 
@@ -92,33 +95,33 @@ body {
   font-family: "Source Sans 3", system-ui, sans-serif;
 }
 
-/* Subtle paper texture */
+/* Subtle paper texture for editorial feel */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar with sepia tones */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--navy-100);
+  background: var(--sepia-100);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--navy-300);
-  border-radius: 5px;
+  background: var(--sepia-400);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--navy-400);
+  background: var(--sepia-500);
 }
 
 /* Line clamp utility */
@@ -129,14 +132,37 @@ body::before {
   overflow: hidden;
 }
 
-/* Focus styles */
+/* Focus styles with coral accent */
 *:focus-visible {
-  outline: 2px solid var(--crimson-500);
+  outline: 2px solid var(--coral-500);
   outline-offset: 2px;
 }
 
 /* Selection color */
 ::selection {
-  background-color: var(--crimson-200);
-  color: var(--navy-900);
+  background-color: var(--coral-200);
+  color: var(--sepia-900);
+}
+
+/* Editorial horizontal divider utility */
+.editorial-divider {
+  height: 1px;
+  background: var(--sepia-800);
+  width: 100%;
+}
+
+/* Editorial headline styles */
+.editorial-headline {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.editorial-headline-caps {
+  font-family: var(--font-serif);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
 }

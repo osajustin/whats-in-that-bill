@@ -58,17 +58,17 @@ export function SearchFilters() {
   return (
     <div className="space-y-4">
       <form onSubmit={handleSearch} className="flex gap-3">
-        {/* Search Input */}
+        {/* Search Input - Editorial Style */}
         <div className="relative flex-1">
           <input
             type="text"
             placeholder="Search by title, sponsor, or keywords..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full rounded-lg border border-navy-200 bg-white py-2.5 pl-10 pr-4 text-navy-900 placeholder-navy-400 transition-colors focus:border-crimson-500 focus:outline-none focus:ring-1 focus:ring-crimson-500"
+            className="w-full border-b-2 border-sepia-300 bg-transparent py-2.5 pl-8 pr-4 text-sepia-900 placeholder-sepia-400 transition-colors focus:border-sepia-800 focus:outline-none"
           />
           <svg
-            className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-navy-400"
+            className="absolute left-0 top-1/2 h-5 w-5 -translate-y-1/2 text-sepia-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -82,11 +82,11 @@ export function SearchFilters() {
           </svg>
         </div>
 
-        {/* Search Button */}
+        {/* Search Button - Coral Accent */}
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-crimson-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-crimson-700 focus:outline-none focus:ring-2 focus:ring-crimson-500 focus:ring-offset-2 disabled:opacity-50"
+          className="bg-coral-500 px-6 py-2.5 font-medium text-white transition-colors hover:bg-coral-600 focus:outline-none focus:ring-2 focus:ring-coral-500 focus:ring-offset-2 disabled:opacity-50"
         >
           {isPending ? "Searching..." : "Search"}
         </button>
@@ -94,11 +94,11 @@ export function SearchFilters() {
 
       {/* Filter Row */}
       <div className="flex flex-wrap items-center gap-3">
-        {/* Status Dropdown */}
+        {/* Status Dropdown - Editorial Style */}
         <select
           value={status}
           onChange={(e) => handleStatusChange(e.target.value)}
-          className="rounded-lg border border-navy-200 bg-white px-3 py-2 text-sm text-navy-700 transition-colors focus:border-crimson-500 focus:outline-none focus:ring-1 focus:ring-crimson-500"
+          className="border-b border-sepia-300 bg-transparent px-1 py-2 text-sm text-sepia-700 transition-colors focus:border-sepia-800 focus:outline-none"
         >
           {STATUS_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
@@ -111,7 +111,7 @@ export function SearchFilters() {
         {hasFilters && (
           <button
             onClick={clearFilters}
-            className="flex items-center gap-1 rounded-lg border border-navy-200 bg-white px-3 py-2 text-sm text-navy-600 transition-colors hover:bg-navy-50"
+            className="flex items-center gap-1 border-b border-sepia-300 px-2 py-2 text-sm text-sepia-600 transition-colors hover:border-sepia-600 hover:text-sepia-900"
           >
             <svg
               className="h-4 w-4"
@@ -126,13 +126,13 @@ export function SearchFilters() {
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-            Clear filters
+            Clear
           </button>
         )}
 
         {/* Loading Indicator */}
         {isPending && (
-          <span className="text-sm text-navy-500">Loading...</span>
+          <span className="text-sm italic text-sepia-500">Loading...</span>
         )}
       </div>
     </div>
