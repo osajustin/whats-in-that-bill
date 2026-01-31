@@ -24,9 +24,9 @@ const partyColors: Record<string, string> = {
 };
 
 // Check if bill is "new" (introduced within last 7 days)
-function isNewBill(introducedDate: string | null): boolean {
+function isNewBill(introducedDate: Date | null): boolean {
   if (!introducedDate) return false;
-  const days = differenceInDays(new Date(), new Date(introducedDate));
+  const days = differenceInDays(new Date(), introducedDate);
   return days <= 7;
 }
 
