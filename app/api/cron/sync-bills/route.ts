@@ -25,6 +25,8 @@ export async function POST(request: NextRequest) {
   const results = {
     processed: 0,
     skipped: 0,
+    summariesGenerated: 0,
+    summaryErrors: [] as string[],
     errors: [] as string[],
   };
 
@@ -109,54 +111,45 @@ export async function POST(request: NextRequest) {
 
         // Fetch full text and generate AI summary
         try {
+          console.log(`Fetching bill text for ${apiBill.type}${apiBill.number}...`);
           const billText = await fetchBillText(
             apiBill.congress,
             apiBill.type,
             apiBill.number
           );
 
-          if (billText) {
-            console.log(`Generating AI summary for ${apiBill.type}${apiBill.number}...`);
-            const summaryResult = await generateBillSummary({
-              title: details.title || apiBill.title,
-              billNumber: `${apiBill.type.toUpperCase()} ${apiBill.number}`,
-              introducedDate: details.introducedDate || "Unknown",
-              sponsor: sponsor?.fullName || "Unknown",
-              billText,
-            });
+          const textToUse = billText || "Full bill text not available. Please base analysis on the title.";
+          
+          console.log(`Generating AI summary for ${apiBill.type}${apiBill.number}... (text length: ${textToUse.length})`);
+          
+          const summaryResult = await generateBillSummary({
+            title: details.title || apiBill.title,
+            billNumber: `${apiBill.type.toUpperCase()} ${apiBill.number}`,
+            introducedDate: details.introducedDate || "Unknown",
+            sponsor: sponsor?.fullName || "Unknown",
+            billText: textToUse,
+          });
 
-            // Save summary to MongoDB
-            await saveSummary(
-              insertedBill.id,
-              formatBillId(apiBill.congress, apiBill.type, apiBill.number),
-              summaryResult.summary,
-              summaryResult.modelUsed,
-              summaryResult.processingTimeMs
-            );
-          } else {
-            console.log(`No text available for ${apiBill.type}${apiBill.number}, generating summary from title only...`);
-            // Generate summary from title only
-            const summaryResult = await generateBillSummary({
-              title: details.title || apiBill.title,
-              billNumber: `${apiBill.type.toUpperCase()} ${apiBill.number}`,
-              introducedDate: details.introducedDate || "Unknown",
-              sponsor: sponsor?.fullName || "Unknown",
-              billText: "Full bill text not available. Please base analysis on the title.",
-            });
-
-            await saveSummary(
-              insertedBill.id,
-              formatBillId(apiBill.congress, apiBill.type, apiBill.number),
-              summaryResult.summary,
-              summaryResult.modelUsed,
-              summaryResult.processingTimeMs
-            );
-          }
+          console.log(`Saving summary to MongoDB for bill ID ${insertedBill.id}...`);
+          
+          // Save summary to MongoDB
+          await saveSummary(
+            insertedBill.id,
+            formatBillId(apiBill.congress, apiBill.type, apiBill.number),
+            summaryResult.summary,
+            summaryResult.modelUsed,
+            summaryResult.processingTimeMs
+          );
+          
+          console.log(`Summary saved successfully for ${apiBill.type}${apiBill.number}`);
+          results.summariesGenerated++;
         } catch (summaryError) {
+          const errorMsg = summaryError instanceof Error ? summaryError.message : "Unknown error";
           console.error(
-            `Failed to generate summary for ${apiBill.type}${apiBill.number}:`,
+            `Failed to generate/save summary for ${apiBill.type}${apiBill.number}:`,
             summaryError
           );
+          results.summaryErrors.push(`${apiBill.type}${apiBill.number}: ${errorMsg}`);
           // Bill is still saved, just without a summary
         }
 
@@ -178,8 +171,10 @@ export async function POST(request: NextRequest) {
       success: true,
       processed: results.processed,
       skipped: results.skipped,
-      errors: results.errors.slice(0, 10), // Limit error output
-      message: `Synced ${results.processed} new bills, skipped ${results.skipped} existing bills`,
+      summariesGenerated: results.summariesGenerated,
+      summaryErrors: results.summaryErrors.slice(0, 10),
+      errors: results.errors.slice(0, 10),
+      message: `Synced ${results.processed} new bills (${results.summariesGenerated} summaries), skipped ${results.skipped} existing bills`,
     });
   } catch (error) {
     console.error("Sync failed:", error);
