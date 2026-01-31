@@ -26,16 +26,12 @@ export async function GET(request: NextRequest) {
   try {
     const db = await getDatabase();
     const collections = await db.listCollections().toArray();
+    const summariesCount = await db.collection("summaries").countDocuments();
+    
     results.mongodb = {
       connected: true,
       database: db.databaseName,
       collections: collections.map((c) => c.name),
-    };
-
-    // Check summaries collection
-    const summariesCount = await db.collection("summaries").countDocuments();
-    results.mongodb = {
-      ...results.mongodb,
       summariesCount,
     };
   } catch (error) {
