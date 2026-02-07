@@ -1,6 +1,7 @@
 "use client";
 
 import { BillCard } from "./bill-card";
+import { FileText } from "lucide-react";
 import type { BillWithSummary } from "@/types";
 
 interface BillListProps {
@@ -10,27 +11,28 @@ interface BillListProps {
 
 function BillCardSkeleton() {
   return (
-    <div className="animate-pulse border-t-2 border-sepia-300 bg-paper p-5">
-      <div className="mb-3 flex items-start justify-between">
+    <div className="animate-pulse border-t-[3px] border-foreground/30 bg-background p-6">
+      <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="h-4 w-20 bg-sepia-200" />
-          <div className="h-4 w-12 bg-coral-100" />
+          <div className="h-4 w-12 bg-foreground/20" />
+          <div className="h-4 w-16 bg-foreground/10" />
         </div>
-        <div className="h-4 w-16 bg-sepia-100" />
+        <div className="h-3 w-20 bg-foreground/10" />
       </div>
       <div className="mb-3 space-y-2">
-        <div className="h-6 w-full bg-sepia-200" />
-        <div className="h-6 w-3/4 bg-sepia-200" />
+        <div className="h-6 w-full bg-foreground/20" />
+        <div className="h-6 w-3/4 bg-foreground/20" />
       </div>
       <div className="mb-4 space-y-1.5">
-        <div className="h-4 w-full bg-sepia-100" />
-        <div className="h-4 w-full bg-sepia-100" />
-        <div className="h-4 w-2/3 bg-sepia-100" />
+        <div className="h-4 w-full bg-foreground/10" />
+        <div className="h-4 w-full bg-foreground/10" />
+        <div className="h-4 w-2/3 bg-foreground/10" />
       </div>
-      <div className="flex items-center justify-between border-t border-sepia-200 pt-3">
-        <div className="h-4 w-32 bg-sepia-100" />
-        <div className="h-4 w-16 bg-sepia-100" />
+      <div className="flex items-center justify-between border-t border-foreground/20 pt-4">
+        <div className="h-3 w-32 bg-foreground/10" />
+        <div className="h-5 w-20 bg-foreground/10" />
       </div>
+      <div className="mt-4 h-3 w-24 bg-foreground/10" />
     </div>
   );
 }
@@ -38,9 +40,11 @@ function BillCardSkeleton() {
 export function BillList({ bills, isLoading }: BillListProps) {
   if (isLoading) {
     return (
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-0 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (
-          <BillCardSkeleton key={i} />
+          <div key={i} className={`${i % 3 !== 2 ? "lg:border-r" : ""} ${i < 3 ? "border-b lg:border-b-0" : ""} border-foreground/20`}>
+            <BillCardSkeleton />
+          </div>
         ))}
       </div>
     );
@@ -48,35 +52,27 @@ export function BillList({ bills, isLoading }: BillListProps) {
 
   if (bills.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center border-t-2 border-dashed border-sepia-300 bg-paper py-16 text-center">
-        <svg
-          className="mb-4 h-12 w-12 text-sepia-300"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
-          />
-        </svg>
-        <h3 className="mb-2 font-serif text-xl font-semibold text-sepia-900">
-          No bills found
+      <div className="border-t-[3px] border-dashed border-foreground/30 py-16 text-center">
+        <FileText className="mx-auto mb-4 h-12 w-12 text-muted-foreground/50" />
+        <h3 className="font-serif text-2xl font-bold text-foreground mb-2">
+          No Bills Found
         </h3>
-        <p className="max-w-sm font-serif text-sm italic text-sepia-500">
-          Try adjusting your search filters or check back later for new
-          legislation.
+        <p className="font-serif text-sm italic text-muted-foreground max-w-sm mx-auto">
+          Try adjusting your search filters or check back later for new legislation.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {bills.map((bill) => (
-        <BillCard key={bill.id} bill={bill} />
+    <div className="grid gap-0 sm:grid-cols-2 lg:grid-cols-3">
+      {bills.map((bill, i) => (
+        <div
+          key={bill.id}
+          className={`${(i + 1) % 3 !== 0 ? "lg:border-r" : ""} ${i < bills.length - (bills.length % 3 || 3) ? "border-b" : ""} border-foreground/20`}
+        >
+          <BillCard bill={bill} />
+        </div>
       ))}
     </div>
   );

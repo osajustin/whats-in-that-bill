@@ -1,26 +1,21 @@
 import Link from "next/link";
 import { format, differenceInDays } from "date-fns";
+import { ArrowRight } from "lucide-react";
 import type { BillWithSummary } from "@/types";
 
 interface BillCardProps {
   bill: BillWithSummary;
 }
 
-const statusColors: Record<string, string> = {
-  Enacted: "bg-emerald-100 text-emerald-800",
-  "Passed Both Chambers": "bg-teal-100 text-teal-800",
-  "Passed House": "bg-blue-100 text-blue-800",
-  "Passed Senate": "bg-indigo-100 text-indigo-800",
-  "In Committee": "bg-amber-100 text-amber-800",
-  Introduced: "bg-sepia-200 text-sepia-800",
-  Vetoed: "bg-red-100 text-red-800",
-  Pending: "bg-sepia-100 text-sepia-700",
-};
-
-const partyColors: Record<string, string> = {
-  D: "text-blue-600",
-  R: "text-red-600",
-  I: "text-purple-600",
+const statusStyles: Record<string, string> = {
+  Enacted: "bg-foreground text-background",
+  "Passed Both Chambers": "bg-foreground text-background",
+  "Passed House": "border border-foreground text-foreground",
+  "Passed Senate": "border border-foreground text-foreground",
+  "In Committee": "border border-foreground/50 text-foreground/70",
+  Introduced: "border border-foreground/30 text-muted-foreground",
+  Vetoed: "bg-destructive text-destructive-foreground",
+  Pending: "border border-foreground/30 text-muted-foreground",
 };
 
 // Check if bill is "new" (introduced within last 7 days)
@@ -31,74 +26,75 @@ function isNewBill(introducedDate: Date | null): boolean {
 }
 
 export function BillCard({ bill }: BillCardProps) {
-  const statusColor = statusColors[bill.status || "Pending"] || statusColors.Pending;
-  const partyColor = partyColors[bill.sponsorParty || ""] || "text-sepia-700";
+  const statusStyle = statusStyles[bill.status || "Pending"] || statusStyles.Pending;
   const isNew = isNewBill(bill.introducedDate);
 
   const billNumber = `${bill.billType.toUpperCase()} ${bill.billNumber}`;
   const formattedDate = bill.introducedDate
-    ? format(new Date(bill.introducedDate), "d MMM yyyy")
-    : "Date unknown";
+    ? format(new Date(bill.introducedDate), "MMM d, yyyy").toUpperCase()
+    : "DATE UNKNOWN";
 
   return (
-    <Link href={`/bills/${bill.id}`} className="group block">
-      <article className="relative h-full overflow-hidden border-t-2 border-sepia-800 bg-paper p-5 transition-all duration-200 hover:bg-sepia-50">
-        {/* Top Decorative Line is handled by border-t */}
-        
-        {/* Header with Bill Number and NEW Badge */}
-        <div className="mb-3 flex items-start justify-between gap-3">
+    <Link href={`/bills/${bill.id}`} className="group block h-full">
+      <article className="relative h-full border-t-[3px] border-foreground bg-background p-6 transition-colors hover:bg-muted/30">
+        {/* Header Row */}
+        <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-serif text-base font-bold tracking-tight text-sepia-900">
-              {billNumber}
-            </span>
             {isNew && (
-              <span className="rounded bg-coral-500 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
-                NEW
+              <span className="bg-urgent text-urgent-foreground font-mono text-[10px] font-bold tracking-widest uppercase px-2 py-0.5">
+                New
               </span>
             )}
+            <span className="font-mono text-xs tracking-widest uppercase text-muted-foreground">
+              {billNumber}
+            </span>
           </div>
-          <span className="text-xs text-sepia-500">{formattedDate}</span>
+          <span className="font-mono text-[10px] tracking-widest uppercase text-muted-foreground">
+            {formattedDate}
+          </span>
         </div>
 
         {/* Title */}
-        <h3 className="mb-3 font-serif text-lg font-semibold leading-snug text-sepia-900 transition-colors group-hover:text-coral-700">
+        <h3 className="mb-3 font-serif text-xl font-bold leading-tight tracking-tight text-foreground group-hover:text-urgent transition-colors">
           {bill.shortTitle || bill.title}
         </h3>
 
         {/* AI Summary */}
         {bill.summary ? (
-          <p className="mb-4 line-clamp-3 text-sm leading-relaxed text-sepia-600">
+          <p className="mb-4 font-sans text-sm leading-relaxed text-muted-foreground line-clamp-3">
             {bill.summary.shortSummary || bill.summary.oneLiner}
           </p>
         ) : (
-          <p className="mb-4 text-sm italic text-sepia-400">
+          <p className="mb-4 font-serif text-sm italic text-muted-foreground/60">
             AI summary pending...
           </p>
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-sepia-200 pt-3">
-          <div className="text-sm">
+        <div className="mt-auto flex items-center justify-between border-t border-foreground/20 pt-4">
+          <div className="font-mono text-xs tracking-wide text-muted-foreground">
             {bill.sponsorName ? (
-              <span className="text-sepia-600">
-                <span className={`font-medium ${partyColor}`}>
-                  {bill.sponsorName}
-                </span>
-                {bill.sponsorState && (
-                  <span className="text-sepia-400"> ({bill.sponsorState})</span>
+              <span>
+                {bill.sponsorName}
+                {bill.sponsorParty && (
+                  <span className="text-foreground/50"> ({bill.sponsorParty})</span>
                 )}
               </span>
             ) : (
-              <span className="text-sepia-400">Sponsor unknown</span>
+              <span className="italic">Sponsor unknown</span>
             )}
           </div>
-          <div className="flex items-center gap-2">
-            <span
-              className={`rounded px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide ${statusColor}`}
-            >
-              {bill.status || "Pending"}
-            </span>
-          </div>
+          <span
+            className={`font-mono text-[10px] font-bold tracking-widest uppercase px-2 py-1 ${statusStyle}`}
+          >
+            {bill.status || "Pending"}
+          </span>
+        </div>
+
+        {/* Read More Link */}
+        <div className="mt-4 flex items-center gap-1 font-mono text-xs tracking-widest uppercase text-foreground group-hover:text-urgent transition-colors">
+          Read Analysis
+          <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
         </div>
       </article>
     </Link>

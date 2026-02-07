@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Lora, Source_Sans_3, Geist_Mono } from "next/font/google";
-import { Header } from "@/components/header";
 import "./globals.css";
 
 const lora = Lora({
@@ -51,7 +50,6 @@ export default function RootLayout({
       <body
         className={`${lora.variable} ${sourceSans.variable} ${geistMono.variable} min-h-screen bg-cream font-sans antialiased text-sepia-900`}
       >
-        <Header />
         {children}
       </body>
     </html>

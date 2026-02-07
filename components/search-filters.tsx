@@ -1,12 +1,13 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
+import { Search, X } from "lucide-react";
 
 const STATUS_OPTIONS = [
   { value: "", label: "All Statuses" },
   { value: "Enacted", label: "Enacted" },
-  { value: "Passed Both Chambers", label: "Passed Both Chambers" },
+  { value: "Passed Both Chambers", label: "Passed Both" },
   { value: "Passed House", label: "Passed House" },
   { value: "Passed Senate", label: "Passed Senate" },
   { value: "In Committee", label: "In Committee" },
@@ -16,6 +17,7 @@ const STATUS_OPTIONS = [
 
 export function SearchFilters() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
@@ -29,10 +31,10 @@ export function SearchFilters() {
       if (newStatus) params.set("status", newStatus);
 
       startTransition(() => {
-        router.push(`/?${params.toString()}`);
+        router.push(`${pathname}?${params.toString()}`);
       });
     },
-    [router]
+    [router, pathname]
   );
 
   const handleSearch = (e: React.FormEvent) => {
@@ -49,90 +51,74 @@ export function SearchFilters() {
     setQuery("");
     setStatus("");
     startTransition(() => {
-      router.push("/");
+      router.push(pathname);
     });
   };
 
   const hasFilters = query || status;
 
   return (
-    <div className="space-y-4">
-      <form onSubmit={handleSearch} className="flex gap-3">
-        {/* Search Input - Editorial Style */}
+    <div className="max-w-4xl mx-auto">
+      {/* Search Form */}
+      <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-0">
         <div className="relative flex-1">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search by title, sponsor, or keywords..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full border-b-2 border-sepia-300 bg-transparent py-2.5 pl-8 pr-4 text-sepia-900 placeholder-sepia-400 transition-colors focus:border-sepia-800 focus:outline-none"
+            className="w-full border-2 border-foreground bg-background py-3 pl-12 pr-4 font-mono text-sm tracking-wide text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-urgent sm:border-r-0"
           />
-          <svg
-            className="absolute left-0 top-1/2 h-5 w-5 -translate-y-1/2 text-sepia-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-            />
-          </svg>
         </div>
-
-        {/* Search Button - Coral Accent */}
         <button
           type="submit"
           disabled={isPending}
-          className="bg-coral-500 px-6 py-2.5 font-medium text-white transition-colors hover:bg-coral-600 focus:outline-none focus:ring-2 focus:ring-coral-500 focus:ring-offset-2 disabled:opacity-50"
+          className="bg-foreground text-background font-mono text-xs tracking-widest uppercase px-8 py-3 border-2 border-foreground hover:bg-urgent hover:border-urgent transition-colors font-bold disabled:opacity-50"
         >
-          {isPending ? "Searching..." : "Search"}
+          {isPending ? "..." : "Search"}
         </button>
       </form>
 
       {/* Filter Row */}
-      <div className="flex flex-wrap items-center gap-3">
-        {/* Status Dropdown - Editorial Style */}
-        <select
-          value={status}
-          onChange={(e) => handleStatusChange(e.target.value)}
-          className="border-b border-sepia-300 bg-transparent px-1 py-2 text-sm text-sepia-700 transition-colors focus:border-sepia-800 focus:outline-none"
-        >
+      <div className="mt-4 flex flex-wrap items-center gap-4">
+        <span className="font-mono text-xs tracking-widest uppercase text-muted-foreground">
+          Filter by:
+        </span>
+
+        {/* Status Pills */}
+        <div className="flex flex-wrap gap-2">
           {STATUS_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
+            <button
+              key={option.value}
+              onClick={() => handleStatusChange(option.value)}
+              className={`font-mono text-[10px] tracking-widest uppercase px-3 py-1.5 border transition-colors ${
+                status === option.value
+                  ? "bg-foreground text-background border-foreground"
+                  : "bg-transparent text-foreground border-foreground/30 hover:border-foreground"
+              }`}
+            >
               {option.label}
-            </option>
+            </button>
           ))}
-        </select>
+        </div>
 
         {/* Clear Filters */}
         {hasFilters && (
           <button
             onClick={clearFilters}
-            className="flex items-center gap-1 border-b border-sepia-300 px-2 py-2 text-sm text-sepia-600 transition-colors hover:border-sepia-600 hover:text-sepia-900"
+            className="inline-flex items-center gap-1 font-mono text-xs tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
           >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <X className="w-3 h-3" />
             Clear
           </button>
         )}
 
         {/* Loading Indicator */}
         {isPending && (
-          <span className="text-sm italic text-sepia-500">Loading...</span>
+          <span className="font-mono text-xs tracking-widest uppercase text-muted-foreground animate-pulse">
+            Loading...
+          </span>
         )}
       </div>
     </div>

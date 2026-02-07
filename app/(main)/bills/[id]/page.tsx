@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { BillDetail } from "@/components/bill-detail";
 
 interface BillPageProps {
@@ -63,8 +65,43 @@ export default async function BillPage({ params }: BillPageProps) {
   }
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <BillDetail bill={data.bill} summary={data.summary} />
-    </main>
+    <>
+      {/* Back Navigation */}
+      <section className="border-b border-foreground/30">
+        <div className="px-6 py-4">
+          <Link
+            href="/bills"
+            className="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Back to All Bills
+          </Link>
+        </div>
+      </section>
+
+      {/* Bill Content */}
+      <section className="border-b-[3px] border-foreground">
+        <div className="p-6 md:p-10">
+          <BillDetail bill={data.bill} summary={data.summary} />
+        </div>
+      </section>
+
+      {/* Source Link */}
+      <section className="border-b-[3px] border-foreground">
+        <div className="p-6 md:p-10 text-center">
+          <p className="font-serif text-sm italic text-muted-foreground">
+            AI-generated summary for informational purposes only.
+          </p>
+          <a
+            href={data.bill.congressUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-2 font-mono text-xs tracking-widest uppercase text-urgent hover:underline"
+          >
+            View official bill on Congress.gov →
+          </a>
+        </div>
+      </section>
+    </>
   );
 }
