@@ -39,7 +39,7 @@ async function getBills(searchParams: {
       throw new Error("Failed to fetch bills");
     }
 
-    return (await response.json()) as BillsResponse;
+    return response.json();
   } catch (error) {
     console.error("Error fetching bills:", error);
     return {

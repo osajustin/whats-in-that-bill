@@ -255,7 +255,9 @@ async function runPhase2(opts: {
             sponsorName: sponsor?.fullName ?? null,
             sponsorParty: sponsor?.party ?? null,
             sponsorState: sponsor?.state ?? null,
-            introducedDate: details.introducedDate || null,
+            introducedDate: details.introducedDate
+              ? new Date(details.introducedDate)
+              : null,
             updatedAt: new Date(),
           })
           .where(
