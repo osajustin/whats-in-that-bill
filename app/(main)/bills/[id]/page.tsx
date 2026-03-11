@@ -2,12 +2,34 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { BillDetail } from "@/components/bill-detail";
+import type { Bill } from "@/types";
 
 interface BillPageProps {
   params: Promise<{ id: string }>;
 }
 
-async function getBill(id: string) {
+interface BillPageData {
+  bill: Bill;
+  summary: {
+    oneLiner: string;
+    shortSummary: string;
+    detailedSummary: string;
+    keyPoints: string[];
+    impact: {
+      whoAffected: string[];
+      potentialEffects: string[];
+    };
+    politicalContext: {
+      bipartisanSupport: boolean;
+      relatedBills: string[];
+      controversialAspects: string[];
+    };
+    generatedAt: Date;
+    modelUsed: string;
+  } | null;
+}
+
+async function getBill(id: string): Promise<BillPageData | null> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
   try {
@@ -22,7 +44,7 @@ async function getBill(id: string) {
       throw new Error("Failed to fetch bill");
     }
 
-    return response.json();
+    return (await response.json()) as BillPageData;
   } catch (error) {
     console.error("Error fetching bill:", error);
     return null;
@@ -92,14 +114,16 @@ export default async function BillPage({ params }: BillPageProps) {
           <p className="font-serif text-sm italic text-muted-foreground">
             AI-generated summary for informational purposes only.
           </p>
-          <a
-            href={data.bill.congressUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-2 font-mono text-xs tracking-widest uppercase text-urgent hover:underline"
-          >
-            View official bill on Congress.gov →
-          </a>
+          {data.bill.congressUrl && (
+            <a
+              href={data.bill.congressUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-2 font-mono text-xs tracking-widest uppercase text-urgent hover:underline"
+            >
+              View official bill on Congress.gov →
+            </a>
+          )}
         </div>
       </section>
     </>

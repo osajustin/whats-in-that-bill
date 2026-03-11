@@ -8,7 +8,8 @@ export async function getSummaryByBillId(
 ): Promise<Summary | null> {
   const db = await getDatabase();
   const collection = db.collection<Summary>(COLLECTION_NAME);
-  return collection.findOne({ billId });
+  const [summary] = await collection.find({ billId }).limit(1).toArray();
+  return summary ?? null;
 }
 
 export async function getSummariesForBills(
