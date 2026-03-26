@@ -25,7 +25,9 @@ export async function fetchRecentBills(
     throw new Error(`Failed to fetch bills: ${response.statusText}`);
   }
 
-  const data = await response.json();
+  const data = (await response.json()) as {
+    bills?: CongressApiBill[];
+  };
   return data.bills || [];
 }
 
@@ -57,7 +59,10 @@ export async function fetchBillsByCongressAndType(
     );
   }
 
-  const data = await response.json();
+  const data = (await response.json()) as {
+    bills?: CongressApiBill[];
+    pagination?: BillsByTypeResponse["pagination"];
+  };
   return {
     bills: data.bills || [],
     pagination: data.pagination,
@@ -80,7 +85,7 @@ export async function fetchBillDetails(
     throw new Error(`Failed to fetch bill details: ${response.statusText}`);
   }
 
-  const data = await response.json();
+  const data = (await response.json()) as { bill?: CongressApiBillDetail };
   return data.bill || null;
 }
 
@@ -103,7 +108,11 @@ export async function fetchBillText(
     );
   }
 
-  const textData = await textVersionsResponse.json();
+  const textData = (await textVersionsResponse.json()) as {
+    textVersions?: Array<{
+      formats?: Array<{ type: string; url: string }>;
+    }>;
+  };
   const textVersions = textData.textVersions || [];
 
   if (textVersions.length === 0) {
@@ -169,7 +178,9 @@ export async function fetchBillSubjects(
     return [];
   }
 
-  const data = await response.json();
+  const data = (await response.json()) as {
+    subjects?: { legislativeSubjects?: Array<{ name: string }> };
+  };
   const subjects = data.subjects?.legislativeSubjects || [];
 
   return subjects.map((s: { name: string }) => s.name);

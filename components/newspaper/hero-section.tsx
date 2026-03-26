@@ -21,7 +21,7 @@ export function HeroSection() {
 
           <div className="relative aspect-[16/9] mb-6 grayscale">
             <Image
-              src="/images/hero-capitol.svg"
+              src="/images/united-states-capitol-washington-dc.webp"
               alt="The United States Capitol building dome in Washington D.C."
               fill
               className="object-cover"

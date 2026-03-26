@@ -2,27 +2,15 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { BillDetail } from "@/components/bill-detail";
+import { getBillDetailPayload } from "@/lib/bills/queries";
 
 interface BillPageProps {
   params: Promise<{ id: string }>;
 }
 
 async function getBill(id: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-
   try {
-    const response = await fetch(`${baseUrl}/api/bills/${id}`, {
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error("Failed to fetch bill");
-    }
-
-    return response.json();
+    return await getBillDetailPayload(id);
   } catch (error) {
     console.error("Error fetching bill:", error);
     return null;
@@ -92,14 +80,16 @@ export default async function BillPage({ params }: BillPageProps) {
           <p className="font-serif text-sm italic text-muted-foreground">
             AI-generated summary for informational purposes only.
           </p>
-          <a
-            href={data.bill.congressUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-2 font-mono text-xs tracking-widest uppercase text-urgent hover:underline"
-          >
-            View official bill on Congress.gov →
-          </a>
+          {data.bill.congressUrl ? (
+            <a
+              href={data.bill.congressUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-2 font-mono text-xs tracking-widest uppercase text-urgent hover:underline"
+            >
+              View official bill on Congress.gov →
+            </a>
+          ) : null}
         </div>
       </section>
     </>

@@ -256,7 +256,7 @@ async function runPhase2(opts: {
             sponsorParty: sponsor?.party ?? null,
             sponsorState: sponsor?.state ?? null,
             introducedDate: details.introducedDate
-              ? new Date(details.introducedDate)
+              ? details.introducedDate.slice(0, 10)
               : null,
             updatedAt: new Date(),
           })

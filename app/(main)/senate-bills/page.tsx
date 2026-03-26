@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { BillList } from "@/components/bill-list";
 import { SearchFilters } from "@/components/search-filters";
 import { Pagination } from "@/components/pagination";
+import { listBillsWithSummaries } from "@/lib/bills/queries";
 import type { BillsResponse } from "@/types";
 
 interface SenateBillsPageProps {
@@ -19,43 +20,19 @@ async function getSenateBills(searchParams: {
   status?: string;
   page?: string;
 }): Promise<BillsResponse> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const params = new URLSearchParams();
-
-  if (searchParams.q) params.set("q", searchParams.q);
-  if (searchParams.status) params.set("status", searchParams.status);
-  if (searchParams.page) params.set("page", searchParams.page);
-  params.set("chamber", "senate");
-
-  const endpoint = searchParams.q
-    ? `${baseUrl}/api/bills/search?${params.toString()}`
-    : `${baseUrl}/api/bills?${params.toString()}`;
-
   try {
-    const response = await fetch(endpoint, {
-      cache: "no-store",
+    const page = Math.max(1, parseInt(searchParams.page || "1", 10) || 1);
+    return await listBillsWithSummaries({
+      page,
+      q: searchParams.q,
+      status: searchParams.status,
+      chamber: "senate",
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch bills");
-    }
-
-    const data: BillsResponse = await response.json();
-
-    // Filter for Senate bills (bill type starts with 's')
-    const senateBills = data.bills.filter(bill =>
-      bill.billType?.toLowerCase().startsWith('s')
-    );
-
-    return {
-      bills: senateBills,
-      pagination: data.pagination,
-    };
   } catch (error) {
     console.error("Error fetching Senate bills:", error);
     return {
       bills: [],
-      pagination: { page: 1, limit: 20, hasMore: false },
+      pagination: { page: 1, limit: 20, hasMore: false, total: 0 },
     };
   }
 }

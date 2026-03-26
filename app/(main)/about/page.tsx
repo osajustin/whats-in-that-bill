@@ -1,4 +1,3 @@
-import { FileText, Search, Eye, Shield } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -64,53 +63,45 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0">
-            <div className="p-6 md:border-r border-foreground/20 border-b md:border-b-0">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-serif text-4xl font-black text-foreground/20">I</span>
-                <FileText className="w-6 h-6 text-foreground" strokeWidth={1.5} />
+            {[
+              {
+                number: "I",
+                headline: "Data Collection",
+                body: "We pull bill data directly from the official Congress.gov API, ensuring accuracy and timeliness. New legislation is processed within minutes.",
+              },
+              {
+                number: "II",
+                headline: "AI Analysis",
+                body: "Our AI reads and analyzes the full text of each bill, identifying key provisions and potential implications that might otherwise go unnoticed.",
+              },
+              {
+                number: "III",
+                headline: "Plain Language",
+                body: "Complex legislative language is translated into clear, accessible summaries. We highlight what matters and explain the real-world impact.",
+              },
+              {
+                number: "IV",
+                headline: "Transparency",
+                body: "We're committed to non-partisan analysis. Our summaries focus on what bills actually do, not political spin. We always link to official sources.",
+              },
+            ].map((step, i, arr) => (
+              <div
+                key={step.number}
+                className={`p-6 ${i < arr.length - 1 ? "md:border-r border-foreground/20" : ""} ${i < arr.length - 1 ? "border-b md:border-b-0 border-foreground/20" : ""}`}
+              >
+                <div className="flex gap-4">
+                  <span className="font-serif text-5xl md:text-6xl font-black text-foreground/15 leading-none shrink-0">
+                    {step.number}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="font-serif text-xl font-bold mb-1">{step.headline}</h3>
+                    <p className="font-sans text-sm leading-relaxed text-muted-foreground">
+                      {step.body}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <h3 className="font-serif text-xl font-bold mb-2">Data Collection</h3>
-              <p className="font-sans text-sm leading-relaxed text-muted-foreground">
-                We pull bill data directly from the official Congress.gov API, ensuring
-                accuracy and timeliness. New legislation is processed within minutes.
-              </p>
-            </div>
-
-            <div className="p-6 md:border-r border-foreground/20 border-b md:border-b-0">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-serif text-4xl font-black text-foreground/20">II</span>
-                <Search className="w-6 h-6 text-foreground" strokeWidth={1.5} />
-              </div>
-              <h3 className="font-serif text-xl font-bold mb-2">AI Analysis</h3>
-              <p className="font-sans text-sm leading-relaxed text-muted-foreground">
-                Our AI reads and analyzes the full text of each bill, identifying key provisions
-                and potential implications that might otherwise go unnoticed.
-              </p>
-            </div>
-
-            <div className="p-6 md:border-r border-foreground/20 border-b md:border-b-0">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-serif text-4xl font-black text-foreground/20">III</span>
-                <Eye className="w-6 h-6 text-foreground" strokeWidth={1.5} />
-              </div>
-              <h3 className="font-serif text-xl font-bold mb-2">Plain Language</h3>
-              <p className="font-sans text-sm leading-relaxed text-muted-foreground">
-                Complex legislative language is translated into clear, accessible summaries.
-                We highlight what matters and explain the real-world impact.
-              </p>
-            </div>
-
-            <div className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="font-serif text-4xl font-black text-foreground/20">IV</span>
-                <Shield className="w-6 h-6 text-foreground" strokeWidth={1.5} />
-              </div>
-              <h3 className="font-serif text-xl font-bold mb-2">Transparency</h3>
-              <p className="font-sans text-sm leading-relaxed text-muted-foreground">
-                We&apos;re committed to non-partisan analysis. Our summaries focus on what bills
-                actually do, not political spin. We always link to official sources.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>

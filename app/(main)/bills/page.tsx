@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { BillList } from "@/components/bill-list";
 import { SearchFilters } from "@/components/search-filters";
 import { Pagination } from "@/components/pagination";
+import { listBillsWithSummaries } from "@/lib/bills/queries";
 import type { BillsResponse } from "@/types";
 
 interface BillsPageProps {
@@ -19,32 +20,19 @@ async function getBills(searchParams: {
   status?: string;
   page?: string;
 }): Promise<BillsResponse> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const params = new URLSearchParams();
-
-  if (searchParams.q) params.set("q", searchParams.q);
-  if (searchParams.status) params.set("status", searchParams.status);
-  if (searchParams.page) params.set("page", searchParams.page);
-
-  const endpoint = searchParams.q
-    ? `${baseUrl}/api/bills/search?${params.toString()}`
-    : `${baseUrl}/api/bills?${params.toString()}`;
-
   try {
-    const response = await fetch(endpoint, {
-      cache: "no-store",
+    const page = Math.max(1, parseInt(searchParams.page || "1", 10) || 1);
+    return await listBillsWithSummaries({
+      page,
+      q: searchParams.q,
+      status: searchParams.status,
+      chamber: "all",
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch bills");
-    }
-
-    return response.json();
   } catch (error) {
     console.error("Error fetching bills:", error);
     return {
       bills: [],
-      pagination: { page: 1, limit: 20, hasMore: false },
+      pagination: { page: 1, limit: 20, hasMore: false, total: 0 },
     };
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useTransition } from "react";
 import type { PaginationInfo } from "@/types";
 
@@ -10,6 +10,7 @@ interface PaginationProps {
 
 export function Pagination({ pagination }: PaginationProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
@@ -20,7 +21,8 @@ export function Pagination({ pagination }: PaginationProps) {
     params.set("page", newPage.toString());
 
     startTransition(() => {
-      router.push(`/?${params.toString()}`);
+      const qs = params.toString();
+      router.push(qs ? `${pathname}?${qs}` : pathname);
     });
   };
 

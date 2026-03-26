@@ -20,7 +20,12 @@ export async function POST(request: NextRequest) {
 
   const { searchParams } = new URL(request.url);
   const limitParam = searchParams.get("limit");
-  const limit = limitParam ? parseInt(limitParam) : 10;
+  const envLimit = process.env.CRON_BACKFILL_SUMMARY_LIMIT;
+  const limit = limitParam
+    ? parseInt(limitParam, 10)
+    : envLimit
+      ? parseInt(envLimit, 10)
+      : 25;
 
   const results = {
     checked: 0,

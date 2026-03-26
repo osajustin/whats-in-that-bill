@@ -45,6 +45,9 @@ OPENAI_API_KEY=sk-...  # Optional fallback
 # Security
 CRON_SECRET=your_random_secret_here  # Generate with: openssl rand -base64 32
 
+# Optional: default batch size when /api/cron/backfill-summaries is called without ?limit=
+# CRON_BACKFILL_SUMMARY_LIMIT=25
+
 # Application
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
@@ -92,6 +95,24 @@ curl -X POST http://localhost:3000/api/cron/sync-bills \
 
 In production, Vercel Cron runs this automatically daily at 6 AM UTC.
 
+A second job runs **`/api/cron/backfill-summaries`** at 6:30 AM UTC to generate AI summaries for bills that exist in Postgres but not yet in MongoDB. Set the same **`CRON_SECRET`** in Vercel project env vars so both cron requests authorize successfully.
+
+To backfill summaries manually:
+
+```bash
+curl -X POST "http://localhost:3000/api/cron/backfill-summaries?limit=10" \
+  -H "Authorization: Bearer YOUR_CRON_SECRET"
+```
+
+Bulk metadata backfill (Congress.gov → Postgres, no AI):
+
+```bash
+npm run backfill:phase1 -- --congress=119
+npm run backfill:phase2 -- --congress=119
+```
+
+Bill list pages read Postgres/MongoDB directly in production (no dependency on `NEXT_PUBLIC_APP_URL` for server rendering).
+
 ## Project Structure
 
 ```
@@ -107,6 +128,7 @@ whats-in-that-bill/
 ├── lib/
 │   ├── db/                  # Drizzle ORM setup
 │   ├── mongodb/             # MongoDB client
+│   ├── bills/               # Shared bill queries (Postgres + MongoDB)
 │   ├── congress-api/        # Congress API integration
 │   └── langchain/           # AI summary generation
 ├── types/                   # TypeScript types
@@ -117,10 +139,11 @@ whats-in-that-bill/
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/bills` | GET | List bills with pagination |
+| `/api/bills` | GET | List bills with pagination. Query: `page`, `limit`, `status`, `chamber` (`senate` \| `house`), `billType` (exact e.g. `hr`) |
 | `/api/bills/[id]` | GET | Get single bill with summary |
-| `/api/bills/search` | GET | Search bills by query |
-| `/api/cron/sync-bills` | POST | Trigger bill sync (protected) |
+| `/api/bills/search` | GET | Search bills by query (`q`) + same filters as list |
+| `/api/cron/sync-bills` | POST/GET | Trigger bill sync (protected) |
+| `/api/cron/backfill-summaries` | POST/GET | Generate missing AI summaries (protected) |
 
 ## Deployment
 

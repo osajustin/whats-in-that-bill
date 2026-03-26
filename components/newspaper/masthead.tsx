@@ -22,7 +22,9 @@ export function Masthead() {
       {/* Main masthead */}
       <div className="px-6 py-6 md:py-10 text-center">
         <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none text-balance">
-          {"What's in That Bill"}
+          <a href="/" className="hover:opacity-80 transition-opacity">
+            {"What's in That Bill"}
+          </a>
         </h1>
         <div className="mt-3 flex items-center justify-center gap-4">
           <div className="h-px flex-1 max-w-24 bg-foreground/40" />
